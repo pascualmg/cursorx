@@ -1,14 +1,20 @@
-import { displayLog } from './utils';
+import { displayLog } from './utils'
 import { interval } from 'rxjs'
-import { mapTo, take } from 'rxjs/operators'
+import { tap, mapTo, take } from 'rxjs/operators'
 
 export default () => {
-    /** start coding */
+  /** start coding */
 
-    interval(1000,2).pipe(
-      take(2),
-      mapTo('hola')
-    ).subscribe(displayLog)
+  interval(1000, 2).pipe(
+    take(22),
+    tap(displayLog),
+    tap(displayLog),
+    mapTo('hola caracola'),
+  ).subscribe(displayLog)
 
-    /** end coding */
+  interval(1000).subscribe(
+    console.log,
+  )
+
+  /** end coding */
 }
