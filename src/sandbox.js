@@ -1,6 +1,6 @@
 import { displayLog } from './utils'
 import { fromEvent } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 
 const log = (next) => {
   console.log('next', next)//TODO: borrame.
@@ -26,17 +26,26 @@ function styledGrid (grid) {
   return grid
 }
 
-const toCoord = (ev) => new Coord(ev.screenX, ev.screenY)
+const toCoord = (ev) => new Coord(ev.offsetX, ev.offsetY)
+const toSquareCoord = (coord) => new Coord(Math.floor(coord.x / 50),
+  Math.floor(coord.y / 50))
 
-const toSquareCoord = (coord) =>  new Coord(Math.floor(coord.x / 50), Math.floor(coord.y / 50))
+const toSquare = (ev) => {
+  return toSquareCoord(toCoord(ev))
+}
+/**
+ *
+ * @param coord {Coord}
+ */
+const pares = (coord) => coord.x % 2 === 0
 
 export default () => {
   /** start coding */
   const grid = styledGrid(document.getElementById('grid'))
 
   fromEvent(grid, 'click').pipe(
-    map(toCoord),
-    map(toSquareCoord),
+    map(toSquare),
+    filter(pares)
   ).subscribe(log)
 
   /** end coding */
